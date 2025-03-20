@@ -42,7 +42,7 @@ Google Chrome
 ChromeDriver compatível com a versão do Chrome instalada
 🚀 Instalação
 1.Clone este repositório:
-git clone https://github.com/seu-usuario/autopec.git
+git clone https://github.com/mipaclaro/autopec.git
 cd autopec
 
 2.Crie um ambiente virtual e ative-o:
