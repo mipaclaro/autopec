@@ -18,54 +18,65 @@ def exibir_menu():
 
 def main():
     """Fluxo principal do aplicativo."""
-    # Inicializar o driver do Selenium
-    driver = inicializar_driver()
+    try:
+        # Inicializar o driver do Selenium
+        driver = inicializar_driver()
 
-    # Realizar login no sistema
-    realizar_login(driver)
+        # Realizar login no sistema
+        realizar_login(driver)
 
-    # Carregar coordenadas do Excel
-    coordenadas = carregar_coordenadas_excel('coordenadas_mouse.xlsx')
-    if coordenadas:
+        # Carregar coordenadas do Excel
+        coordenadas = carregar_coordenadas_excel('coordenadas_mouse.xlsx')
+        if not coordenadas:
+            print("Erro: Falha ao carregar coordenadas. Verifique o arquivo 'coordenadas_mouse.xlsx'.")
+            driver.quit()
+            return
+
         print("Coordenadas carregadas com sucesso.")
-    else:
-        print("Falha ao carregar coordenadas. Verifique o arquivo 'coordenadas_mouse.xlsx'.")
-        driver.quit()
-        return
 
-    # Loop do menu principal
-    while True:
-        escolha = exibir_menu()
-        if escolha == "1":
-            print("\nIniciando processamento de passagem...")
-            passagem()
-        elif escolha == "2":
-            print("\nIniciando processamento de retirada...")
-            processar_retirada()
-        elif escolha == "3":
-            print("\nIniciando processamento de compras...")
-            processar_compras()
-        elif escolha == "4":
-            print("\nIniciando liquidação de contas...")
-            liquidar_contas()
-        elif escolha == "5":
-            print("\nIniciando transferência de saldo para outras unidades...")
-            processar_lancamentos()
-        elif escolha == "6":
-            print("\nIniciando processamento de compras total (PDF)...")
-            processar_compras_total('compras_total.pdf', 'DISTRIBUICAO.xlsx')
-        elif escolha == "7":
-            print("\nIniciando processamento de raios (PDF)...")
-            lista_pdfs = ['raio1', 'raio2', 'raio3', 'raio4']
-            processar_raios(lista_pdfs, 'DISTRIBUICAO.xlsx')
-        elif escolha == "0":
-            print("\nSaindo do sistema...")
-            break
-        else:
-            print("\nOpção inválida! Tente novamente.")
+        # Loop do menu principal
+        while True:
+            escolha = exibir_menu()
+            try:
+                if escolha == "1":
+                    print("\nIniciando processamento de passagem...")
+                    passagem()
+                elif escolha == "2":
+                    print("\nIniciando processamento de retirada...")
+                    processar_retirada()
+                elif escolha == "3":
+                    print("\nIniciando processamento de compras...")
+                    processar_compras()
+                elif escolha == "4":
+                    print("\nIniciando liquidação de contas...")
+                    liquidar_contas()
+                elif escolha == "5":
+                    print("\nIniciando transferência de saldo para outras unidades...")
+                    processar_lancamentos()
+                elif escolha == "6":
+                    print("\nIniciando processamento de compras total (PDF)...")
+                    processar_compras_total('compras_total.pdf', 'DISTRIBUICAO.xlsx')
+                elif escolha == "7":
+                    print("\nIniciando processamento de raios (PDF)...")
+                    lista_pdfs = ['raio1', 'raio2', 'raio3', 'raio4']
+                    processar_raios(lista_pdfs, 'DISTRIBUICAO.xlsx')
+                elif escolha == "0":
+                    print("\nSaindo do sistema...")
+                    break
+                else:
+                    print("\nOpção inválida! Tente novamente.")
+            except Exception as e:
+                print(f"Erro ao executar a funcionalidade escolhida: {e}")
 
-    # Finalizar o driver
-    driver.quit()
+    except Exception as e:
+        print(f"Erro crítico: {e}")
+    finally:
+        # Finalizar o driver
+        try:
+            driver.quit()
+        except:
+            pass
+        print("Sistema finalizado.")
 
 if __name__ == "__main__":
     main()
